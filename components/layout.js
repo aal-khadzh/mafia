@@ -7,7 +7,7 @@ const Layout = ({ children, adminPage }) => (
       .main {
         width: 100vw;
         height: 100vh;
-        padding: 10% 0;
+        padding: 200px 0;
       }
 
       .container {
