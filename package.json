@@ -5,9 +5,11 @@
   "main": "index.js",
   "scripts": {
     "dev": "node server.js",
+    "lint": "eslint --fix --ignore-path .gitignore .",
+    "format": "prettier --write --ignore-path .gitignore \"**/*.{js, json}\"",
     "build": "next build",
     "start": "NODE_ENV=production node server.js",
-    "deploy": "now --public && now alias",
+    "deploy": "npm run format && npm run lint && now --public && now alias && now rm mafia --safe --yes",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -25,5 +27,23 @@
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "socket.io": "^2.2.0"
+  },
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-plugin-react": "^7.19.0",
+    "husky": "^4.2.3",
+    "lint-staged": "^10.0.8",
+    "prettier": "^1.19.1"
+  },
+  "lint-staged": {
+    "*": [
+      "npm run format && npm run lint",
+      "git add"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   }
 }
