@@ -1,11 +1,11 @@
-import React, { Component } from "react";
-import RoomCreator from "./roomCreator";
-import AdminPage from "./adminPage";
-import UserLogin from "./userLogin";
-import Layout from "./layout";
-import AnimatedText from "./animatedText";
+import React, { Component } from 'react';
+import RoomCreator from './roomCreator';
+import AdminPage from './adminPage';
+import UserLogin from './userLogin';
+import Layout from './layout';
+import AnimatedText from './animatedText';
 
-import { toaster } from "evergreen-ui";
+import { toaster } from 'evergreen-ui';
 
 export default class App extends Component {
   static getDerivedStateFromProps(props, state) {
@@ -21,23 +21,23 @@ export default class App extends Component {
     subscribe: false,
     subscribed: false,
     adminFlag: this.props.initialData.admin
-      ? this.props.storage.hasOwnProperty("admin")
+      ? this.props.storage.hasOwnProperty('admin')
         ? true
         : false
       : true,
-    roomCreated: this.props.storage.hasOwnProperty("admin") ? true : false,
+    roomCreated: this.props.storage.hasOwnProperty('admin') ? true : false,
     roomSettings: {},
-    usersList: this.props.storage.hasOwnProperty("admin")
+    usersList: this.props.storage.hasOwnProperty('admin')
       ? this.props.initialData.users
       : [],
-    userName: this.props.storage.hasOwnProperty("name")
-      ? this.props.storage.getItem("name")
-      : "",
-    userLogged: this.props.storage.hasOwnProperty("name") ? true : false,
-    userData: this.props.storage.hasOwnProperty("name")
+    userName: this.props.storage.hasOwnProperty('name')
+      ? this.props.storage.getItem('name')
+      : '',
+    userLogged: this.props.storage.hasOwnProperty('name') ? true : false,
+    userData: this.props.storage.hasOwnProperty('name')
       ? App.getUser(
           this.props.initialData.users,
-          this.props.storage.getItem("name")
+          this.props.storage.getItem('name')
         )
       : {}
   };
@@ -52,9 +52,9 @@ export default class App extends Component {
 
   componentWillUnmount() {
     const { socket } = this.props;
-    socket.off("channel", this.handleGameSetUpdates);
-    socket.off("reset", this.handleGameReset);
-    socket.off("userDisconnected", this.handleUserDisconnection);
+    socket.off('channel', this.handleGameSetUpdates);
+    socket.off('reset', this.handleGameReset);
+    socket.off('userDisconnected', this.handleUserDisconnection);
     this.setState({ subscribed: false, subscribe: false });
   }
 
@@ -63,13 +63,13 @@ export default class App extends Component {
     const { subscribe, subscribed, userName, userData } = this.state;
     if (subscribe && !subscribed) {
       gameSet.updateGameSet(initialData);
-      socket.on("channel", this.handleGameSetUpdates);
-      socket.on("reset", this.handleGameReset);
-      socket.on("userDisconnected", this.handleUserDisconnection);
+      socket.on('channel', this.handleGameSetUpdates);
+      socket.on('reset', this.handleGameReset);
+      socket.on('userDisconnected', this.handleUserDisconnection);
       this.setState({ subscribed: true });
       if (userName) {
         gameSet.connectUser(name, socket.id);
-        socket.emit("channel", gameSet);
+        socket.emit('channel', gameSet);
       }
     }
   };
@@ -80,16 +80,16 @@ export default class App extends Component {
     const { gameSet, storage } = this.props;
     gameSet.updateGameSet(data);
     this.hydrateState();
-    if (storage.getItem("reset")) {
+    if (storage.getItem('reset')) {
       location.reload(true);
-      storage.removeItem("reset");
+      storage.removeItem('reset');
     }
   };
 
   handleGameReset = () => {
     const { storage } = this.props;
     Object.keys(storage).forEach(key => storage.removeItem(key));
-    storage.setItem("reset", true);
+    storage.setItem('reset', true);
     location.reload(true);
   };
 
@@ -105,12 +105,12 @@ export default class App extends Component {
   hydrateState = () => {
     const { gameSet, storage } = this.props;
     const { userName } = this.state;
-    if (storage.hasOwnProperty("name")) {
+    if (storage.hasOwnProperty('name')) {
       const user = App.getUser(gameSet.users, userName);
       this.setState({
         userData: user ? user : {}
       });
-      localStorage.setItem("darkMode", gameSet.nightMode);
+      localStorage.setItem('darkMode', gameSet.nightMode);
     } else {
       this.setState({ usersList: gameSet.users });
     }
@@ -118,7 +118,7 @@ export default class App extends Component {
 
   reset = () => {
     const { socket } = this.props;
-    socket.emit("reset");
+    socket.emit('reset');
     this.handleGameReset();
   };
 
@@ -162,9 +162,9 @@ export default class App extends Component {
       gameSet.addRoles();
     }
     this.setState({ roomCreated: true }, () => {
-      socket.emit("channel", gameSet);
-      storage.setItem("admin", id);
-      storage.removeItem("reset");
+      socket.emit('channel', gameSet);
+      storage.setItem('admin', id);
+      storage.removeItem('reset');
     });
   };
 
@@ -172,23 +172,23 @@ export default class App extends Component {
     const { gameSet, socket } = this.props;
     if (gameSet.users.length === gameSet.roles.length) {
       gameSet.assignRoles();
-      socket.emit("channel", gameSet);
+      socket.emit('channel', gameSet);
       this.hydrateState();
     } else {
-      toaster.danger("Wait for all citizens to connect");
+      toaster.danger('Wait for all citizens to connect');
     }
   };
 
   handleUserRemoval = userName => {
     const { socket, gameSet } = this.props;
     this.setState({ usersList: gameSet.removeUser(userName) });
-    socket.emit("channel", gameSet);
+    socket.emit('channel', gameSet);
   };
 
   toggleNigthMode = value => {
     const { socket, gameSet } = this.props;
     gameSet.setNightMode(!value);
-    socket.emit("channel", gameSet);
+    socket.emit('channel', gameSet);
   };
 
   //User
@@ -198,8 +198,8 @@ export default class App extends Component {
     const { userName } = this.state;
     if (gameSet.validateUser(userName)) {
       const user = gameSet.addUser(userName, socket.id);
-      storage.setItem("name", userName);
-      socket.emit("channel", gameSet);
+      storage.setItem('name', userName);
+      socket.emit('channel', gameSet);
       this.setState({
         userLogged: true,
         userData: user
@@ -223,30 +223,30 @@ export default class App extends Component {
       userData
     } = this.state;
     if (adminFlag && !roomCreated) {
-      return "set the mafia";
+      return 'set the mafia';
     } else if (
       adminFlag &&
       roomCreated &&
       gameSet.playersQnt > usersList.length &&
       !gameSet.rolesAssigned
     ) {
-      return "tell your citizens to connect";
+      return 'tell your citizens to connect';
     } else if (
       adminFlag &&
       roomCreated &&
       gameSet.playersQnt === usersList.length &&
       !gameSet.rolesAssigned
     ) {
-      return "assign the roles";
+      return 'assign the roles';
     } else if (
       adminFlag &&
       roomCreated &&
       gameSet.playersQnt === usersList.length &&
       gameSet.rolesAssigned
     ) {
-      return "let the mafia begins";
+      return 'let the mafia begins';
     } else if (!adminFlag && !userLogged && !gameSet.rolesAssigned) {
-      return "tell your name, citizen";
+      return 'tell your name, citizen';
     } else if (
       !adminFlag &&
       userLogged &&
@@ -263,14 +263,14 @@ export default class App extends Component {
     ) {
       return `${userName}, you are ${userData.role}`;
     } else if (!adminFlag && userLogged && Object.keys(userData).length === 0) {
-      storage.removeItem("name");
+      storage.removeItem('name');
       return `${userName}, you will be remembered`;
     } else if (adminFlag && gameSet.rolesAssigned && gameSet.gameStarted) {
       return gameSet.getGameStatus();
     } else if (!adminFlag && userLogged && gameSet.gameFinished) {
       return gameSet.getGameStatus();
     } else {
-      return "mafia is here! run away";
+      return 'mafia is here! run away';
     }
   }
 

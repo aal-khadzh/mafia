@@ -6,7 +6,7 @@ export default class GameSet {
     this.hoeFlag;
     this.admin = { connected: true };
     this.users = [];
-    this.roles = ["m", "s", "c"];
+    this.roles = ['m', 's', 'c'];
     this.nightMode = false;
     this.rolesAssigned = false;
     this.gameStarted = false;
@@ -27,16 +27,16 @@ export default class GameSet {
 
   addRoles() {
     if (this.docFlag) {
-      this.roles.push("d");
+      this.roles.push('d');
     }
     if (this.hoeFlag) {
-      this.roles.push("h");
+      this.roles.push('h');
     }
     for (let i = 1; i < this.mafiaQnt; i++) {
-      this.roles.push("m");
+      this.roles.push('m');
     }
     for (let i = this.roles.length; i < this.playersQnt; i++) {
-      this.roles.push("c");
+      this.roles.push('c');
     }
   }
 
@@ -107,8 +107,8 @@ export default class GameSet {
     if (this.gameStarted) {
       if (
         this.users.length ===
-          this.users.filter(user => user.role === "m").length ||
-        !this.users.find(user => user.role === "m")
+          this.users.filter(user => user.role === 'm').length ||
+        !this.users.find(user => user.role === 'm')
       ) {
         this.gameFinished = true;
       }
@@ -126,12 +126,12 @@ export default class GameSet {
   }
 
   getGameStatus() {
-    const maf = this.users.filter(pl => pl.role === "m").length;
+    const maf = this.users.filter(pl => pl.role === 'm').length;
     const civ = this.users.length - maf;
     if (maf === this.users.length) {
-      return "mafia conquered this city";
+      return 'mafia conquered this city';
     } else if (civ === this.users.length) {
-      return "civilians got back this city";
+      return 'civilians got back this city';
     } else {
       return `mafia: ${(maf / this.users.length).toFixed(2) *
         100}% vs civilians: ${(civ / this.users.length).toFixed(2) * 100}%`;

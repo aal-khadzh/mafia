@@ -1,7 +1,7 @@
-import React, { Component } from "react";
-import ColorModeSwitcher from "./colorModeSwitcher";
-import User from "./user";
-import { Button, Flex, Grid } from "@chakra-ui/core";
+import React, { Component } from 'react';
+import ColorModeSwitcher from './colorModeSwitcher';
+import User from './user';
+import { Button, Flex, Grid } from '@chakra-ui/core';
 
 const AdminPage = ({
   usersList,
@@ -14,7 +14,7 @@ const AdminPage = ({
   return (
     <>
       <Flex
-        style={{ position: "absolute", bottom: 8 }}
+        style={{ position: 'absolute', bottom: 8 }}
         className="adminButtons"
       >
         <Button onClick={reset}>Reset</Button>

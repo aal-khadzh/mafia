@@ -1,5 +1,5 @@
-import { Input, Checkbox, Button } from "@chakra-ui/core";
-import { Component } from "react";
+import { Input, Checkbox, Button } from '@chakra-ui/core';
+import { Component } from 'react';
 
 const RoomCreator = ({
   roomSettings,

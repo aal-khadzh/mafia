@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
 const AnimatedText = ({ string }) => (
   <>
@@ -10,7 +10,7 @@ const AnimatedText = ({ string }) => (
         @import url(https://fonts.googleapis.com/css?family=Anonymous+Pro);
 
         .container {
-          font-family: "Anonymous Pro", monospace;
+          font-family: 'Anonymous Pro', monospace;
         }
         .line-1 {
           width: ${(24 / 44) * string.length}em;

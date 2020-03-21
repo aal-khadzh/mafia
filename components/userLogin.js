@@ -1,5 +1,5 @@
-import { Component } from "react";
-import { Input, Button } from "@chakra-ui/core";
+import { Component } from 'react';
+import { Input, Button } from '@chakra-ui/core';
 
 const UserLogin = ({ userName, handleChangeUserName, logUser }) => (
   <>

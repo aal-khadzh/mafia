@@ -1,12 +1,12 @@
-import App from "next/app";
-import React from "react";
-import io from "socket.io-client";
+import App from 'next/app';
+import React from 'react';
+import io from 'socket.io-client';
 import {
   ColorModeProvider,
   theme,
   ThemeProvider,
   CSSReset
-} from "@chakra-ui/core";
+} from '@chakra-ui/core';
 
 class MyApp extends App {
   state = {
