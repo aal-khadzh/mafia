@@ -43,6 +43,7 @@ export default class App extends Component {
   };
 
   componentDidMount() {
+    localStorage.setItem('darkMode', false);
     this.subscribe();
   }
 
