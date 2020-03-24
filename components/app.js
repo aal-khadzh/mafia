@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import RoomCreator from './roomCreator';
 import AdminPage from './adminPage';
 import UserLogin from './userLogin';
@@ -61,7 +62,7 @@ export default class App extends Component {
 
   subscribe = () => {
     const { gameSet, initialData, socket } = this.props;
-    const { subscribe, subscribed, userName, userData } = this.state;
+    const { subscribe, subscribed, userName } = this.state;
     if (subscribe && !subscribed) {
       gameSet.updateGameSet(initialData);
       socket.on('channel', this.handleGameSetUpdates);
@@ -154,7 +155,6 @@ export default class App extends Component {
       socket,
       socket: { id },
       gameSet,
-      gameSet: { playersQnt, mafiaQnt, docFlag, hoeFlag },
       storage
     } = this.props;
     const { roomSettings } = this.state;
@@ -213,11 +213,10 @@ export default class App extends Component {
   //UI
 
   animatedTextString() {
-    const { gameSet, socket, storage } = this.props;
+    const { gameSet, storage } = this.props;
     const {
       adminFlag,
       roomCreated,
-      roomSettings,
       usersList,
       userLogged,
       userName,
@@ -276,15 +275,14 @@ export default class App extends Component {
   }
 
   renderPage() {
-    const { gameSet, socket } = this.props;
+    const { gameSet } = this.props;
     const {
       adminFlag,
       roomCreated,
       roomSettings,
       usersList,
       userLogged,
-      userName,
-      userData
+      userName
     } = this.state;
     if (adminFlag && !roomCreated) {
       return (
@@ -329,3 +327,10 @@ export default class App extends Component {
     );
   }
 }
+
+App.propTypes = {
+  socket: PropTypes.any,
+  storage: PropTypes.any,
+  initialData: PropTypes.object,
+  gameSet: PropTypes.object
+};

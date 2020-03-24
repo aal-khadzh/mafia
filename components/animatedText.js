@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 const AnimatedText = ({ string }) => (
   <>
@@ -16,7 +17,7 @@ const AnimatedText = ({ string }) => (
           width: ${(24 / 44) * string.length}em;
           margin: 0 auto;
           border-right: 2px solid transparent;
-          font-size: ${string.length > 20 ? (180 / 44) * string.length : 180}%;
+          font-size: ${string.length > 15 ? (180 / 44) * string.length : 180}%;
           text-align: center;
           white-space: nowrap;
           overflow: hidden;
@@ -49,5 +50,9 @@ const AnimatedText = ({ string }) => (
     </style>
   </>
 );
+
+AnimatedText.propTypes = {
+  string: PropTypes.string
+};
 
 export default AnimatedText;

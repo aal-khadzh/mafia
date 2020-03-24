@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
   Avatar,
   AvatarBadge,
@@ -24,24 +25,29 @@ const avatarDeterminer = role => {
   }
 };
 
-const User = ({ user: { name, role, connected }, remove }) => (
+const User = ({ user, remove }) => (
   <Flex margin="0 8px">
     <Avatar
-      showBorder={role !== 'm' ? true : false}
-      borderColor={role !== 'm' ? 'gray.800' : false}
-      bg={role ? 'white' : 'gray.800'}
-      name={name}
-      src={avatarDeterminer(role)}
+      showBorder={user.role !== 'm' ? true : false}
+      borderColor={user.role !== 'm' ? 'gray.800' : false}
+      bg={user.role ? 'white' : 'gray.800'}
+      name={user.name}
+      src={avatarDeterminer(user.role)}
     >
-      <AvatarBadge size="1.25em" bg={connected ? 'green.500' : 'tomato'} />
+      <AvatarBadge size="1.25em" bg={user.connected ? 'green.500' : 'tomato'} />
     </Avatar>
     <Box ml="3">
       <CloseButton size="sm" onClick={remove} />
       <Text marginLeft="8px" fontWight="bold">
-        {name}
+        {user.name}
       </Text>
     </Box>
   </Flex>
 );
+
+User.propTypes = {
+  user: PropTypes.object,
+  remove: PropTypes.function
+};
 
 export default User;

@@ -1,5 +1,6 @@
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Input, Checkbox, Button } from '@chakra-ui/core';
-import { Component } from 'react';
 
 const RoomCreator = ({
   roomSettings,
@@ -31,5 +32,14 @@ const RoomCreator = ({
     <Button onClick={createRoom}>Create</Button>
   </>
 );
+
+RoomCreator.propTypes = {
+  roomSettings: PropTypes.object,
+  handleChangePlayersQnt: PropTypes.function,
+  handleChangeMafiaQnt: PropTypes.function,
+  handleChangeDocFlag: PropTypes.function,
+  handleChangeHoeFlag: PropTypes.function,
+  createRoom: PropTypes.function
+};
 
 export default RoomCreator;

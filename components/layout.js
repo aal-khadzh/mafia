@@ -1,6 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-const Layout = ({ children, adminPage }) => (
+const Layout = ({ children }) => (
   <div className="main">
     <div className="container">{children}</div>
     <style jsx>{`
@@ -20,5 +21,9 @@ const Layout = ({ children, adminPage }) => (
     `}</style>
   </div>
 );
+
+Layout.propTypes = {
+  children: PropTypes.node
+};
 
 export default Layout;

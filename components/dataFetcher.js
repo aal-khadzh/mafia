@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import fetch from 'isomorphic-unfetch';
 import dynamic from 'next/dynamic';
 
@@ -37,3 +38,8 @@ export default class DataFetcher extends Component {
     );
   }
 }
+
+DataFetcher.propTypes = {
+  socket: PropTypes.any,
+  initialData: PropTypes.object
+};

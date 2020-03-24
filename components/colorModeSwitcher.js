@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { IconButton, useColorMode } from '@chakra-ui/core';
 
 function ColorModeSwitcher({ toggleNigthMode }) {
@@ -14,5 +15,9 @@ function ColorModeSwitcher({ toggleNigthMode }) {
     />
   );
 }
+
+ColorModeSwitcher.propTypes = {
+  toggleNigthMode: PropTypes.function
+};
 
 export default ColorModeSwitcher;

@@ -1,14 +1,15 @@
-import React, { Component } from 'react';
+import React from 'react';
 import ColorModeSwitcher from './colorModeSwitcher';
 import User from './user';
-import { Button, Flex, Grid } from '@chakra-ui/core';
+import { Button, Flex } from '@chakra-ui/core';
+import PropTypes from 'prop-types';
 
 const AdminPage = ({
   usersList,
   handleRolesAssignment,
   toggleNigthMode,
   handleUserRemoval,
-  gameSet: { rolesAssigned, gameFinished },
+  gameSet,
   reset
 }) => {
   return (
@@ -18,9 +19,9 @@ const AdminPage = ({
         className="adminButtons"
       >
         <Button onClick={reset}>Reset</Button>
-        {!gameFinished ? (
+        {!gameSet.gameFinished ? (
           <>
-            {rolesAssigned ? (
+            {gameSet.rolesAssigned ? (
               <ColorModeSwitcher toggleNigthMode={toggleNigthMode} />
             ) : (
               <Button onClick={handleRolesAssignment}>Assign</Button>
@@ -35,14 +36,27 @@ const AdminPage = ({
         padding="10%"
         wrap="wrap"
       >
-        {!gameFinished
+        {!gameSet.gameFinished
           ? usersList.map(user => (
-              <User user={user} remove={() => handleUserRemoval(user.name)} />
+              <User
+                key={user.name}
+                user={user}
+                remove={() => handleUserRemoval(user.name)}
+              />
             ))
           : null}
       </Flex>
     </>
   );
+};
+
+AdminPage.propTypes = {
+  usersList: PropTypes.array,
+  handleRolesAssignment: PropTypes.function,
+  toggleNigthMode: PropTypes.function,
+  handleUserRemoval: PropTypes.function,
+  gameSet: PropTypes.object,
+  reset: PropTypes.function
 };
 
 export default AdminPage;
