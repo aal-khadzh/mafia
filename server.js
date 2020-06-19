@@ -16,8 +16,25 @@ io.on('connection', socket => {
   console.log(JSON.stringify(socket.id) + ' connected');
   clients.push(socket);
   socket.on('channel', data => {
-    gameSet = data;
-    socket.broadcast.emit('channel', gameSet);
+    const inputKeys = Object.keys(data);
+    inputKeys.forEach(key => {
+      gameSet[key] = data[key];
+    });
+    socket.broadcast.emit('channel', data);
+  });
+  socket.on('user', userData => {
+    const users = gameSet.users.map(user => user.name);
+    if (users.includes(userData.name)) {
+      gameSet.users = gameSet.users.map(user => {
+        if (user.name === userData.name) {
+          return userData;
+        }
+        return user;
+      });
+    } else {
+      gameSet.users.push(userData);
+    }
+    socket.broadcast.emit('user', userData);
   });
   socket.on('reset', () => {
     gameSet = {};

@@ -8,19 +8,20 @@ import {
   Flex,
   Text
 } from '@chakra-ui/core';
+import { rolesEnum } from '../utils/gameset';
 
 const avatarDeterminer = role => {
   const url = img => `${window.location.href}static/${img}`;
   switch (role) {
-    case 'm':
+    case rolesEnum.MAFIA:
       return url('maf.svg');
-    case 's':
+    case rolesEnum.SHERIFF:
       return url('sh.png');
-    case 'h':
-      return url('sl.png');
-    case 'd':
+    case rolesEnum.PROSTITUTE:
+      return url('pr.png');
+    case rolesEnum.DOCTOR:
       return url('doc.png');
-    case 'c':
+    case rolesEnum.CIVILIAN:
       return url('civ.svg');
   }
 };
@@ -28,13 +29,16 @@ const avatarDeterminer = role => {
 const User = ({ user, remove }) => (
   <Flex margin="0 8px">
     <Avatar
-      showBorder={user.role !== 'm' ? true : false}
-      borderColor={user.role !== 'm' ? 'gray.800' : false}
+      showBorder={user.role !== rolesEnum.MAFIA ? true : false}
+      borderColor={user.role !== rolesEnum.MAFIA ? 'gray.800' : false}
       bg={user.role ? 'white' : 'gray.800'}
       name={user.name}
       src={avatarDeterminer(user.role)}
     >
-      <AvatarBadge size="1.25em" bg={user.connected ? 'green.500' : 'tomato'} />
+      <AvatarBadge
+        size="1.25em"
+        bg={user.isConnected ? 'green.500' : 'tomato'}
+      />
     </Avatar>
     <Box ml="3">
       <CloseButton size="sm" onClick={remove} />

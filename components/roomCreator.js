@@ -4,30 +4,33 @@ import { Input, Checkbox, Button } from '@chakra-ui/core';
 
 const RoomCreator = ({
   roomSettings,
-  handleChangePlayersQnt,
-  handleChangeMafiaQnt,
-  handleChangeDocFlag,
-  handleChangeHoeFlag,
+  onChangePlayersQnt,
+  onChangeMafiaQnt,
+  onChangeDocFlag,
+  onChangeHoeFlag,
   createRoom
 }) => (
   <>
     <Input
       placeholder="Citizens"
       type="number"
-      onChange={handleChangePlayersQnt}
-      value={roomSettings.playersQnt}
+      onChange={onChangePlayersQnt}
+      value={roomSettings.playersQuantity || ''}
     />
     <Input
       placeholder="Mafiozi"
       type="number"
-      onChange={handleChangeMafiaQnt}
-      value={roomSettings.mafiaQnt}
+      onChange={onChangeMafiaQnt}
+      value={roomSettings.mafiaQuantity || ''}
     />
-    <Checkbox onChange={handleChangeDocFlag} isChecked={roomSettings.docFlag}>
+    <Checkbox onChange={onChangeDocFlag} isChecked={roomSettings.doctorFlag}>
       Doctor
     </Checkbox>
-    <Checkbox onChange={handleChangeHoeFlag} isChecked={roomSettings.hoeFlag}>
-      Slut
+    <Checkbox
+      onChange={onChangeHoeFlag}
+      isChecked={roomSettings.prostituteFlag}
+    >
+      Prostitute
     </Checkbox>
     <Button onClick={createRoom}>Create</Button>
   </>
@@ -35,10 +38,10 @@ const RoomCreator = ({
 
 RoomCreator.propTypes = {
   roomSettings: PropTypes.object,
-  handleChangePlayersQnt: PropTypes.function,
-  handleChangeMafiaQnt: PropTypes.function,
-  handleChangeDocFlag: PropTypes.function,
-  handleChangeHoeFlag: PropTypes.function,
+  onChangePlayersQnt: PropTypes.function,
+  onChangeMafiaQnt: PropTypes.function,
+  onChangeDocFlag: PropTypes.function,
+  onChangeHoeFlag: PropTypes.function,
   createRoom: PropTypes.function
 };
 
