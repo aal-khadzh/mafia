@@ -1,140 +1,134 @@
-export default class GameSet {
-  constructor() {
-    this.playersQnt;
-    this.mafiaQnt;
-    this.docFlag;
-    this.hoeFlag;
-    this.admin = { connected: true };
-    this.users = [];
-    this.roles = ['m', 's', 'c'];
-    this.nightMode = false;
-    this.rolesAssigned = false;
-    this.gameStarted = false;
-    this.gameFinished = false;
+export const rolesEnum = {
+  MAFIA: 'mafia',
+  SHERIFF: 'sheriff',
+  CIVILIAN: 'civilian',
+  DOCTOR: 'doctor',
+  PROSTITUTE: 'prostitute'
+};
+
+export const addRoles = gameSet => {
+  const roles = [rolesEnum.MAFIA, rolesEnum.SHERIFF, rolesEnum.CIVILIAN];
+  if (gameSet.doctorFlag) {
+    roles.push(rolesEnum.DOCTOR);
   }
-
-  updateGameSet(prevGameSet, id) {
-    const inputKeys = Object.keys(prevGameSet);
-    inputKeys.forEach(key => {
-      this[key] = prevGameSet[key];
-    });
-    if (id) {
-      this.admin.id = id;
-    }
+  if (gameSet.prostituteFlag) {
+    roles.push(rolesEnum.PROSTITUTE);
   }
-
-  //Roles
-
-  addRoles() {
-    if (this.docFlag) {
-      this.roles.push('d');
-    }
-    if (this.hoeFlag) {
-      this.roles.push('h');
-    }
-    for (let i = 1; i < this.mafiaQnt; i++) {
-      this.roles.push('m');
-    }
-    for (let i = this.roles.length; i < this.playersQnt; i++) {
-      this.roles.push('c');
-    }
+  for (let i = 1; i < gameSet.mafiaQuantity; i++) {
+    roles.push(rolesEnum.MAFIA);
   }
-
-  assignRoles() {
-    const shuffleArray = array => {
-      let currentIndex = array.length;
-      let temporaryValue, randomIndex;
-
-      while (0 !== currentIndex) {
-        randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex -= 1;
-        temporaryValue = array[currentIndex];
-        array[currentIndex] = array[randomIndex];
-        array[randomIndex] = temporaryValue;
-      }
-      return array;
-    };
-
-    this.users = shuffleArray(this.users);
-    this.roles = shuffleArray(this.roles);
-    for (let i = 0; i < this.users.length; i++) {
-      this.users[i].role = this.roles[i];
-    }
-    this.rolesAssigned = true;
+  for (let i = roles.length; i < gameSet.playersQuantity; i++) {
+    roles.push(rolesEnum.CIVILIAN);
   }
+  return roles;
+};
 
-  //Users
+export const assignRoles = gameSet => {
+  const shuffleArray = array => {
+    let currentIndex = array.length;
+    let temporaryValue, randomIndex;
 
-  validateUser(name) {
-    if (this.users.find(user => user.name === name)) {
-      return false;
-    } else {
-      return true;
+    while (0 !== currentIndex) {
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+      temporaryValue = array[currentIndex];
+      array[currentIndex] = array[randomIndex];
+      array[randomIndex] = temporaryValue;
     }
-  }
+    return array;
+  };
 
-  addUser(name, id) {
-    if (this.users.length < this.playersQnt) {
-      const user = {
-        name: name,
-        connected: true,
-        role: undefined,
-        id: id
-      };
-      this.users.push(user);
-      return user;
-    }
+  const users = shuffleArray(gameSet.users);
+  const roles = shuffleArray(gameSet.roles);
+  for (let i = 0; i < users.length; i++) {
+    users[i].role = roles[i];
   }
+  return users;
+};
 
-  connectUser(name, id) {
-    const user = this.users.find(user => user.name === name);
-    if (user) {
-      user.connected = true;
-      user.id = id;
-    }
+const getGameStatus = users => {
+  const maf = users.filter(pl => pl.role === rolesEnum.MAFIA).length;
+  const civ = users.length - maf;
+  if (maf === users.length) {
+    return 'mafia conquered this city';
+  } else if (civ === users.length) {
+    return 'civilians got back this city';
+  } else {
+    return `mafia: ${(maf / users.length).toFixed(2) * 100}% vs civilians: ${(
+      civ / users.length
+    ).toFixed(2) * 100}%`;
   }
+};
 
-  disconnectUser(id) {
-    const user = this.users.find(user => user.id === id);
-    if (user) {
-      user.connected = false;
-      user.id = null;
-    }
+export const getAnimatedTextString = gameSet => {
+  const {
+    adminFlag,
+    isRoomCreated,
+    users,
+    isUserLoggedIn,
+    username,
+    userData,
+    playersQuantity,
+    areRolesAssigned,
+    isStarted,
+    isFinished
+  } = gameSet;
+  if (adminFlag && !isRoomCreated) {
+    return 'set the mafia';
+  } else if (
+    adminFlag &&
+    isRoomCreated &&
+    playersQuantity > users.length &&
+    !areRolesAssigned
+  ) {
+    return 'tell your citizens to connect';
+  } else if (
+    adminFlag &&
+    isRoomCreated &&
+    playersQuantity === users.length &&
+    !areRolesAssigned
+  ) {
+    return 'assign the roles';
+  } else if (
+    adminFlag &&
+    isRoomCreated &&
+    playersQuantity === users.length &&
+    areRolesAssigned
+  ) {
+    return 'let the mafia begins';
+  } else if (
+    !adminFlag &&
+    !isUserLoggedIn &&
+    !areRolesAssigned &&
+    playersQuantity > users.length
+  ) {
+    return 'tell your name, citizen';
+  } else if (adminFlag && areRolesAssigned && isStarted) {
+    return getGameStatus(users);
+  } else if (
+    !adminFlag &&
+    isUserLoggedIn &&
+    Object.keys(userData).length !== 0 &&
+    !areRolesAssigned
+  ) {
+    return `welcome, ${username}! now wait`;
+  } else if (
+    !adminFlag &&
+    isUserLoggedIn &&
+    areRolesAssigned &&
+    Object.keys(userData).length !== 0 &&
+    !isFinished
+  ) {
+    return `${username}, you are ${userData.role}`;
+  } else if (
+    !adminFlag &&
+    isUserLoggedIn &&
+    Object.keys(userData).length === 0
+  ) {
+    return `${username}, you will be remembered`;
+  } else if (!adminFlag && isUserLoggedIn && isFinished) {
+    return getGameStatus(users);
+  } else {
+    return 'mafia is here! run away';
   }
-
-  removeUser(userName) {
-    this.users = this.users.filter(user => user.name !== userName);
-    if (this.gameStarted) {
-      if (
-        this.users.length ===
-          this.users.filter(user => user.role === 'm').length ||
-        !this.users.find(user => user.role === 'm')
-      ) {
-        this.gameFinished = true;
-      }
-    }
-    return this.users;
-  }
-
-  //Game
-
-  setNightMode(mode) {
-    this.nightMode = mode;
-    if (!this.gameStarted) {
-      this.gameStarted = true;
-    }
-  }
-
-  getGameStatus() {
-    const maf = this.users.filter(pl => pl.role === 'm').length;
-    const civ = this.users.length - maf;
-    if (maf === this.users.length) {
-      return 'mafia conquered this city';
-    } else if (civ === this.users.length) {
-      return 'civilians got back this city';
-    } else {
-      return `mafia: ${(maf / this.users.length).toFixed(2) *
-        100}% vs civilians: ${(civ / this.users.length).toFixed(2) * 100}%`;
-    }
-  }
-}
+};

@@ -5,26 +5,24 @@ import { Button, Flex } from '@chakra-ui/core';
 import PropTypes from 'prop-types';
 
 const AdminPage = ({
-  usersList,
-  handleRolesAssignment,
+  users,
+  onRolesAssignment,
   toggleNigthMode,
-  handleUserRemoval,
-  gameSet,
-  reset
+  onUserRemoval,
+  isFinished,
+  areRolesAssigned,
+  onGameReset
 }) => {
   return (
     <>
-      <Flex
-        style={{ position: 'absolute', bottom: 8 }}
-        className="adminButtons"
-      >
-        <Button onClick={reset}>Reset</Button>
-        {!gameSet.gameFinished ? (
+      <Flex style={{ position: 'absolute', bottom: 8 }}>
+        <Button onClick={onGameReset}>Reset</Button>
+        {!isFinished ? (
           <>
-            {gameSet.rolesAssigned ? (
+            {areRolesAssigned ? (
               <ColorModeSwitcher toggleNigthMode={toggleNigthMode} />
             ) : (
-              <Button onClick={handleRolesAssignment}>Assign</Button>
+              <Button onClick={onRolesAssignment}>Assign</Button>
             )}
           </>
         ) : null}
@@ -36,12 +34,12 @@ const AdminPage = ({
         padding="10%"
         wrap="wrap"
       >
-        {!gameSet.gameFinished
-          ? usersList.map(user => (
+        {!isFinished
+          ? users.map(user => (
               <User
                 key={user.name}
                 user={user}
-                remove={() => handleUserRemoval(user.name)}
+                remove={() => onUserRemoval(user.name)}
               />
             ))
           : null}
@@ -51,12 +49,13 @@ const AdminPage = ({
 };
 
 AdminPage.propTypes = {
-  usersList: PropTypes.array,
-  handleRolesAssignment: PropTypes.function,
+  users: PropTypes.array,
+  onRolesAssignment: PropTypes.function,
   toggleNigthMode: PropTypes.function,
-  handleUserRemoval: PropTypes.function,
-  gameSet: PropTypes.object,
-  reset: PropTypes.function
+  onUserRemoval: PropTypes.function,
+  isFinished: PropTypes.boolean,
+  areRolesAssigned: PropTypes.boolean,
+  onGameReset: PropTypes.function
 };
 
 export default AdminPage;
